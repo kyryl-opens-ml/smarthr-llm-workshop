@@ -152,7 +152,7 @@ def get_pdf_images(pdf_path):
         text = page.extract_text()
         page_texts.append(text)
     # Convert to PIL images
-    images = convert_from_path(pdf_path, dpi=100, fmt="jpeg", jpegopt={"quality": 75, "progressive": True, "optimize": True})
+    images = convert_from_path(pdf_path, dpi=150, fmt="jpeg", jpegopt={"quality": 75, "progressive": True, "optimize": True})
     assert len(images) == len(page_texts)
     return images, page_texts
 
