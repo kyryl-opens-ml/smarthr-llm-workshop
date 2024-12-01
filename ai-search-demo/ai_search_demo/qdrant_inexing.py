@@ -142,6 +142,8 @@ class SearchClient:
 
         return search_result
 
+import tracemalloc
+
 def get_pdf_images(pdf_path):
     reader = PdfReader(pdf_path)
     page_texts = []
@@ -155,6 +157,7 @@ def get_pdf_images(pdf_path):
     return images, page_texts
 
 def pdfs_to_hf_dataset(path_to_folder):
+    tracemalloc.start()  # Start tracing memory allocations
 
     data = []
     global_index = 0
@@ -167,7 +170,6 @@ def pdfs_to_hf_dataset(path_to_folder):
         for page_number, (image, text) in enumerate(zip(images, page_texts)):
             print(f"page_number = {page_number}")
             print(f"image = {image}")
-            print(f"text = {text}")
             data.append({
                 "image": image,
                 "index": global_index,
@@ -176,6 +178,15 @@ def pdfs_to_hf_dataset(path_to_folder):
                 "page_text": text
             })
             global_index += 1
+
+        # Print memory usage after processing each PDF
+        current, peak = tracemalloc.get_traced_memory()
+        print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
+
+    current, peak = tracemalloc.get_traced_memory()
+    print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
+    tracemalloc.stop()  # Stop tracing memory allocations
+
     print("Done processing")
     dataset = Dataset.from_list(data)
     print("Done converting to dataset")
