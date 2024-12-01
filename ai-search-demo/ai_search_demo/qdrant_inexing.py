@@ -1,20 +1,13 @@
-import os
-import torch
-import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 from tqdm import tqdm
-from datasets import load_dataset
-import stamina
 from pdf2image import convert_from_path
 from pypdf import PdfReader
 import io
-os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
 
 
 
 
-from colpali_engine.models import ColQwen2, ColQwen2Processor
 
 
 import requests
