@@ -178,13 +178,16 @@ def pdfs_to_hf_dataset(path_to_folder):
                 "page_text": text
             })
             global_index += 1
+            # Print memory usage after processing each image
+            current, peak = tracemalloc.get_traced_memory()
+            print(f"IMAGE: Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
 
         # Print memory usage after processing each PDF
         current, peak = tracemalloc.get_traced_memory()
-        print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
+        print(f"PDF: Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
 
     current, peak = tracemalloc.get_traced_memory()
-    print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
+    print(f"TOTAL: Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
     tracemalloc.stop()  # Stop tracing memory allocations
 
     print("Done processing")
