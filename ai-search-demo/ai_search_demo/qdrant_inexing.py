@@ -152,7 +152,7 @@ def get_pdf_images(pdf_path):
         text = page.extract_text()
         page_texts.append(text)
     # Convert to PIL images
-    images = convert_from_path(pdf_path)
+    images = convert_from_path(pdf_path, dpi=100, fmt="jpeg", jpegopt={"quality": 75, "progressive": True, "optimize": True})
     assert len(images) == len(page_texts)
     return images, page_texts
 
@@ -180,7 +180,6 @@ def pdfs_to_hf_dataset(path_to_folder):
             global_index += 1
             # Print memory usage after processing each image
             current, peak = tracemalloc.get_traced_memory()
-            print(f"IMAGE: Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
 
         # Print memory usage after processing each PDF
         current, peak = tracemalloc.get_traced_memory()
