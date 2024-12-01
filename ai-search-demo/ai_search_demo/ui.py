@@ -11,22 +11,7 @@ from datasets import load_from_disk
 search_client = SearchClient()
 ingest_client = IngestClient()
 
-def run_search(input_text: str, collection_name: str):
-
-    mock_image = Image.new('RGB', (100, 100), color = 'red')  # Create a simple red image
-    mock_response = [
-        {
-            "image": mock_image,
-            "score": 0.95,
-            "text": "Sample text",
-            "document_name": "Sample Document",
-            "page": 1
-        }
-    ]
-    return mock_response
     
-
-
 def ai_search():
     st.header("AI Search")
 
@@ -141,7 +126,9 @@ def display_all_collections():
         st.write("No collections found.")
 
 def about():
-    pass
+    with open("README.md", "r") as readme_file:
+        readme_content = readme_file.read()
+    st.markdown(readme_content)
 
 tab1, tab2, tab3, tab4 = st.tabs(["AI Search", "Upload", "Collections", "About"])
 

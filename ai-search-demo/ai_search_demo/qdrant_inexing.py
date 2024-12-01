@@ -172,16 +172,7 @@ def pdfs_to_hf_dataset(path_to_folder):
                 "page_text": text
             })
             global_index += 1
-
+    print("Done processing")
     dataset = Dataset.from_list(data)
+    print("Done converting to dataset")
     return dataset
-
-if __name__ == "__main__":
-    dataset = pdfs_to_hf_dataset('./pdf_collections/test')
-    dataset = pdfs_to_hf_dataset('./pdf_collections/smart-hr')
-
-    ingest_client = IngestClient()
-    ingest_client.ingest("smart-hr", dataset)
-
-    search_client = SearchClient("smart-hr")
-    search_client.search_images_by_text("a cat")
