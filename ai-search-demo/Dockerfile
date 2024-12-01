@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     ffmpeg \
     git \
-    git-lfs
+    git-lfs \
+    poppler-utils
 
 WORKDIR /app
 
