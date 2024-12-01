@@ -41,5 +41,5 @@ jobs:
           context: ai-search-demo
           push: true
           tags: ghcr.io/kyryl-opens-ml/smart-hr-ai-search:latest
-          cache-from: type=registry,ref=ghcr.io/kyryl-opens-ml/workshop-experiments:buildcache
-          cache-to: type=registry,ref=ghcr.io/kyryl-opens-ml/workshop-experiments:buildcache,mode=max
+          cache-from: type=registry,ref=ghcr.io/kyryl-opens-ml/smart-hr-ai-search:buildcache
+          cache-to: type=registry,ref=ghcr.io/kyryl-opens-ml/smart-hr-ai-search:buildcache,mode=max
