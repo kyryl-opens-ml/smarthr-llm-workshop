@@ -70,7 +70,7 @@ def ai_search():
                 else:
                     st.write("No results found.")
 
-def upload():
+def create_new_collection():
     st.header("Upload PDFs")
 
     # Create a form for uploading PDFs and entering the collection name
@@ -118,7 +118,7 @@ def upload():
         # Run the processing and ingestion in a separate thread
         threading.Thread(target=process_and_ingest).start()
 
-    # Display a list of all previously uploaded collections
+def display_all_collections():
     st.header("Previously Uploaded Collections")
 
     if os.path.exists("storage"):
@@ -143,12 +143,13 @@ def upload():
 def about():
     pass
 
-tab1, tab2, tab3 = st.tabs(["AI Search", "Upload", "About"])
+tab1, tab2, tab3, tab4 = st.tabs(["AI Search", "Upload", "Collections", "About"])
 
 with tab1:
     ai_search()
 with tab2:
-    upload()
+    create_new_collection()
 with tab3:
-    st.header("An owl")
-    st.image("https://static.streamlit.io/examples/owl.jpg", width=200)
+    display_all_collections()
+with tab4:
+    about()
