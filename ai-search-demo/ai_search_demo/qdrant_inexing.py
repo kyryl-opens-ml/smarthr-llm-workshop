@@ -4,16 +4,20 @@ from tqdm import tqdm
 from pdf2image import convert_from_path
 from pypdf import PdfReader
 import io
-
-
-
-
-
-
 import requests
 
+# Constants
+COLPALI_BASE_URL = "https://truskovskiyk--colpali-embedding-serve.modal.run"
+COLPALI_TOKEN = "super-secret-token"
+QDRANT_URI = "https://qdrant.up.railway.app"
+QDRANT_PORT = 443
+VECTOR_SIZE = 128
+INDEXING_THRESHOLD = 100
+QUANTILE = 0.99
+TOP_K = 5
+
 class ColPaliClient:
-    def __init__(self, base_url: str = "https://truskovskiyk--colpali-embedding-serve.modal.run", token: str = "super-secret-token"):
+    def __init__(self, base_url: str = COLPALI_BASE_URL, token: str = COLPALI_TOKEN):
         self.base_url = base_url
         self.headers = {"Authorization": f"Bearer {token}"}
 
@@ -51,21 +55,19 @@ class ColPaliClient:
         
 
 class IngestClient:
-    def __init__(self, qdrant_uri: str = "https://qdrant.up.railway.app"):
-        self.qdrant_client = QdrantClient(qdrant_uri, port=443, https=True)
+    def __init__(self, qdrant_uri: str = QDRANT_URI):
+        self.qdrant_client = QdrantClient(qdrant_uri, port=QDRANT_PORT, https=True)
         self.colpali_client = ColPaliClient()
 
     def ingest(self, collection_name, dataset):
-        vector_size = 128 
-
         self.qdrant_client.create_collection(
             collection_name=collection_name,
             on_disk_payload=True,
             optimizers_config=models.OptimizersConfigDiff(
-                indexing_threshold=100
+                indexing_threshold=INDEXING_THRESHOLD
             ),
             vectors_config=models.VectorParams(
-                size=vector_size,
+                size=VECTOR_SIZE,
                 distance=models.Distance.COSINE,
                 multivector_config=models.MultiVectorConfig(
                     comparator=models.MultiVectorComparator.MAX_SIM
@@ -73,7 +75,7 @@ class IngestClient:
                 quantization_config=models.ScalarQuantization(
                     scalar=models.ScalarQuantizationConfig(
                         type=models.ScalarType.INT8,
-                        quantile=0.99,
+                        quantile=QUANTILE,
                         always_ram=True,
                     ),
                 ),
@@ -119,11 +121,11 @@ class IngestClient:
         print("Indexing complete!")           
 
 class SearchClient:
-    def __init__(self, qdrant_uri: str = "https://qdrant.up.railway.app/"):
-        self.qdrant_client = QdrantClient(qdrant_uri, port=443, https=True)
+    def __init__(self, qdrant_uri: str = QDRANT_URI):
+        self.qdrant_client = QdrantClient(qdrant_uri, port=QDRANT_PORT, https=True)
         self.colpali_client = ColPaliClient()
 
-    def search_images_by_text(self, query_text, collection_name: str, top_k=5):
+    def search_images_by_text(self, query_text, collection_name: str, top_k=TOP_K):
         # Use ColPaliClient to query text and get the embedding
         query_embedding = self.colpali_client.query_text(query_text)
 

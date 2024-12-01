@@ -66,7 +66,7 @@ docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z 
 
 ```
 docker build -t smart-hr-ai-search:latest .
-docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
+docker run -p 8000:8000 -v $(pwd)/app_storage:/storage smart-hr-ai-search:latest
 ```
 
 ## References:
