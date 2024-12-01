@@ -5,6 +5,9 @@ from pdf2image import convert_from_path
 from pypdf import PdfReader
 import io
 import requests
+from pathlib import Path
+from datasets import Dataset
+from tqdm import tqdm
 
 # Constants
 COLPALI_BASE_URL = "https://truskovskiyk--colpali-embedding-serve.modal.run"
@@ -152,10 +155,6 @@ def get_pdf_images(pdf_path):
     return images, page_texts
 
 def pdfs_to_hf_dataset(path_to_folder):
-    from pathlib import Path
-    from datasets import Dataset
-    from PIL import Image
-    from tqdm import tqdm
 
     data = []
     global_index = 0

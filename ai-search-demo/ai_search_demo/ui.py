@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import threading
 from ai_search_demo.qdrant_inexing import IngestClient, pdfs_to_hf_dataset
-from ai_search_demo.qdrant_inexing import SearchClient, IngestClient
+from ai_search_demo.qdrant_inexing import SearchClient
 from datasets import load_from_disk
 
 STORAGE_DIR = "storage"

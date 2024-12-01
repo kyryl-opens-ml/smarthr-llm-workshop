@@ -71,3 +71,5 @@ docker run -p 8000:8000 -v $(pwd)/app_storage:/storage smart-hr-ai-search:latest
 
 ## References:
 
+- [ColPali: Efficient Document Retrieval with Vision Language Models](https://github.com/illuin-tech/colpali?)
+- [Qdrant - Vector Databas](https://github.com/qdrant/qdrant)
