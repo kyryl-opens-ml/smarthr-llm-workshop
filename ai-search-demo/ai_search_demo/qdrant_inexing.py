@@ -165,6 +165,9 @@ def pdfs_to_hf_dataset(path_to_folder):
         images, page_texts = get_pdf_images(str(pdf_file))
 
         for page_number, (image, text) in enumerate(zip(images, page_texts)):
+            print(f"page_number = {page_number}")
+            print(f"image = {image}")
+            print(f"text = {text}")
             data.append({
                 "image": image,
                 "index": global_index,
