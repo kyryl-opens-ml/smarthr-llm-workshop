@@ -14,7 +14,7 @@ from rich import print
 from rich.table import Table
 from tqdm import tqdm
 
-from ai_search_demo.qdrant_inexing import SearchClient, pdfs_to_hf_dataset
+from ai_search_demo.qdrant_inexing import SearchClient, pdfs_to_hf_dataset, IngestClient
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
