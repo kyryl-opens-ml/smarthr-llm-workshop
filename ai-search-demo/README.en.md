@@ -6,7 +6,7 @@ This is a small demo showing how to build AI search on top of visual data (PDFs,
 
 ## Why 
 
-The classic way to handle visual documents (PDFs, forms, images, etc.) is to use OCR, Layout Detection, Table Recognition, etc. See [PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit) [Tesseract](https://github.com/tesseract-ocr/tesseract) or [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) for example. However, we are going to split PDFs by page and embed each as an image to avoid complexity. The main models we are going to use are [Qwen2-VL](https://arxiv.org/abs/2409.12191) for visual understanding and ColPali.
+The classic way to handle visual documents (PDFs, forms, images, etc.) is to use OCR, Layout Detection, Table Recognition, etc. See [PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit) [Tesseract](https://github.com/tesseract-ocr/tesseract) or [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) for example. However, we are going to split PDFs by page and embed each as an image to avoid complexity. The main models we are going to use are [Qwen2-VL](https://arxiv.org/abs/2409.12191) for visual understanding and [ColPali](https://github.com/illuin-tech/colpali).
 
 
 ## Evaluation
@@ -62,6 +62,11 @@ Smart HR Synthetic Data Single Image Multiple Queries
 python ai_search_demo/evaluate_synthetic_data.py create-synthetic-dataset ./example_data/smart-hr ./example_data/smart-hr-synthetic-data-single-image-multiple-queries koml/smart-hr-synthetic-data-single-image-multiple-queries --num-samples 1000
 python ai_search_demo/evaluate_synthetic_data.py evaluate-on-synthetic-dataset koml/smart-hr-synthetic-data-single-image-multiple-queries --collection-name smart-hr-synthetic-data-single-image-multiple-queries
 ```
+
+## Demo data
+
+- [SmartHR](https://smarthr.jp/know-how/ebook/tv-campaign/)
+- VC Reports: [InfraRed](https://www.redpoint.com/infrared/report/) & [The State of Generative AI in the Enterprise](https://menlovc.com/2024-the-state-of-generative-ai-in-the-enterprise/)
 
 ## Architecture 
 
@@ -135,6 +140,14 @@ sequenceDiagram
 
 ## LLM inference 
 
+
+Setup
+
+```
+pip install modal
+modal setup
+```
+
 Download models
 
 ```
@@ -147,6 +160,6 @@ modal run llm-inference/llm_serving_load_models.py --model-name vidore/colqwen2-
 Deploy models
 
 ```
-modal deploy llm-inference/llm_serving.py 
+modal deploy llm-inference/llm_serving.py
 modal deploy llm-inference/llm_serving_colpali.py
 ```

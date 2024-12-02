@@ -107,7 +107,7 @@ def ai_search():
                     
                     # Display VLLM output in the second column
                     with col2:
-                        st.markdown("<h3 style='color:green;'>Relevant Images</h3>", unsafe_allow_html=True)
+                        st.markdown("<h3 style='color:green;'>Interpretation with LLM</h3>", unsafe_allow_html=True)
                         for image_data, _, _, _ in search_results_data:
                             with st.spinner("Processing with VLLM..."):
                                 vllm_output = call_vllm(image_data)

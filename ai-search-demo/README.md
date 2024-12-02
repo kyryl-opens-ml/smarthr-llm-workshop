@@ -6,7 +6,7 @@
 
 ## なぜ
 
-視覚的な文書（PDF、フォーム、画像など）を扱う従来の方法は、OCR、レイアウト検出、テーブル認識などを使用することです。例えば、[PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit)、[Tesseract](https://github.com/tesseract-ocr/tesseract)、または[PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)を参照してください。しかし、私たちはPDFをページごとに分割し、各ページを画像として埋め込むことで複雑さを回避します。視覚的理解のために使用する主なモデルは[Qwen2-VL](https://arxiv.org/abs/2409.12191)とColPaliです。
+視覚的な文書（PDF、フォーム、画像など）を扱う従来の方法は、OCR、レイアウト検出、テーブル認識などを使用することです。例えば、[PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit)、[Tesseract](https://github.com/tesseract-ocr/tesseract)、または[PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)を参照してください。しかし、私たちはPDFをページごとに分割し、各ページを画像として埋め込むことで複雑さを回避します。視覚的理解のために使用する主なモデルは[Qwen2-VL](https://arxiv.org/abs/2409.12191)と[ColPali](https://github.com/illuin-tech/colpali)です。
 
 ## 評価
 
@@ -61,6 +61,12 @@ Smart HR 合成データ 単一画像 複数クエリ
 python ai_search_demo/evaluate_synthetic_data.py create-synthetic-dataset ./example_data/smart-hr ./example_data/smart-hr-synthetic-data-single-image-multiple-queries koml/smart-hr-synthetic-data-single-image-multiple-queries --num-samples 1000
 python ai_search_demo/evaluate_synthetic_data.py evaluate-on-synthetic-dataset koml/smart-hr-synthetic-data-single-image-multiple-queries --collection-name smart-hr-synthetic-data-single-image-multiple-queries
 ```
+
+## Demo data
+
+- [SmartHR](https://smarthr.jp/know-how/ebook/tv-campaign/)
+- VC Reports: [InfraRed](https://www.redpoint.com/infrared/report/) & [The State of Generative AI in the Enterprise](https://menlovc.com/2024-the-state-of-generative-ai-in-the-enterprise/)
+
 
 ## Architecture 
 
@@ -134,6 +140,14 @@ sequenceDiagram
 
 ## LLM推論
 
+セットアップ
+
+```
+pip install modal
+modal setup
+```
+
+
 モデルのダウンロード
 
 ```
@@ -146,6 +160,6 @@ modal run llm-inference/llm_serving_load_models.py --model-name vidore/colqwen2-
 モデルをデプロイする
 
 ```
-modal deploy llm-inference/llm_serving.py 
+modal deploy llm-inference/llm_serving.py
 modal deploy llm-inference/llm_serving_colpali.py
 ```
