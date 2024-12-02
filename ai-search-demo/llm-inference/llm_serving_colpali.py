@@ -35,11 +35,11 @@ HOURS = 60 * MINUTES
 @modal.asgi_app()
 def serve():
     import fastapi
+    import torch
     from colpali_engine.models import ColQwen2, ColQwen2Processor
+    from fastapi import APIRouter, Depends, HTTPException, Security
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.security import HTTPBearer
-    from fastapi import HTTPException, Security, APIRouter, Depends
-    import torch
 
     volume.reload()  # ensure we have the latest version of the weights
 

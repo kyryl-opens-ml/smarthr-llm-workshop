@@ -1,11 +1,11 @@
-import streamlit as st
-import os
 import json
+import os
+
 import pandas as pd
-import threading
-from ai_search_demo.qdrant_inexing import IngestClient, pdfs_to_hf_dataset
-from ai_search_demo.qdrant_inexing import SearchClient
+import streamlit as st
 from datasets import load_from_disk
+
+from ai_search_demo.qdrant_inexing import IngestClient, SearchClient, pdfs_to_hf_dataset
 
 STORAGE_DIR = "storage"
 COLLECTION_INFO_FILENAME = "collection_info.json"
@@ -101,8 +101,9 @@ def create_new_collection():
             with open(os.path.join(collection_dir, COLLECTION_INFO_FILENAME), "w") as json_file:
                 json.dump(collection_info, json_file)
 
-        # Run the processing and ingestion in a separate thread
-        threading.Thread(target=process_and_ingest).start()
+        # Run the processing and ingestion in the current function with a spinner
+        with st.spinner('Processing and ingesting PDFs...'):
+            process_and_ingest()
 
 def display_all_collections():
     st.header("Previously Uploaded Collections")
