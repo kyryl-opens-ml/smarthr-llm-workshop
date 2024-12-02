@@ -16,7 +16,9 @@ SEARCH_TOP_K = 5
 search_client = SearchClient()
 ingest_client = IngestClient()
 
-    
+# Set Streamlit to use wide mode by default
+st.set_page_config(layout="wide")
+
 def ai_search():
     st.header("AI Search")
 
@@ -57,13 +59,13 @@ def ai_search():
                     st.write("No results found.")
 
 def create_new_collection():
-    st.header("Upload PDFs")
+    st.header("Create PDFs collection")
 
     # Create a form for uploading PDFs and entering the collection name
     with st.form("upload_form"):
         uploaded_files = st.file_uploader("Choose multiple PDF files", type="pdf", accept_multiple_files=True)
         collection_name = st.text_input("Enter the name of the collection")
-        submit_button = st.form_submit_button("Upload")
+        submit_button = st.form_submit_button("Create")
 
     if submit_button and uploaded_files and collection_name:
         # Create a directory for the collection
@@ -71,15 +73,19 @@ def create_new_collection():
         os.makedirs(collection_dir, exist_ok=True)
 
         # Save PDFs to the collection directory
+        file_names = []
         for uploaded_file in uploaded_files:
-            with open(os.path.join(collection_dir, uploaded_file.name), "wb") as f:
+            file_path = os.path.join(collection_dir, uploaded_file.name)
+            with open(file_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
+            file_names.append(uploaded_file.name)
 
         # Create a JSON file with collection details
         collection_info = {
             "name": collection_name,
             "status": "processing",
-            "number_of_PDFs": len(uploaded_files)
+            "number_of_PDFs": len(uploaded_files),
+            "files": file_names
         }
         with open(os.path.join(collection_dir, COLLECTION_INFO_FILENAME), "w") as json_file:
             json.dump(collection_info, json_file)
@@ -88,18 +94,24 @@ def create_new_collection():
 
         # Function to process and ingest PDFs
         def process_and_ingest():
-            # Transform PDFs to HF dataset
-            dataset = pdfs_to_hf_dataset(collection_dir)
-            dataset.save_to_disk(os.path.join(collection_dir, HF_DATASET_DIRNAME))
+            try:
+                # Transform PDFs to HF dataset
+                dataset = pdfs_to_hf_dataset(collection_dir)
+                dataset.save_to_disk(os.path.join(collection_dir, HF_DATASET_DIRNAME))
 
-            # Ingest collection with IngestClient
-            ingest_client = IngestClient()
-            ingest_client.ingest(collection_name, dataset)
+                # Ingest collection with IngestClient
+                ingest_client = IngestClient()
+                ingest_client.ingest(collection_name, dataset)
 
-            # Update JSON status to 'done'
-            collection_info['status'] = 'done'
-            with open(os.path.join(collection_dir, COLLECTION_INFO_FILENAME), "w") as json_file:
-                json.dump(collection_info, json_file)
+                # Update JSON status to 'done'
+                collection_info['status'] = 'done'
+            except Exception as e:
+                # Update JSON status to 'error' in case of any exception
+                collection_info['status'] = 'error'
+                st.error(f"An error occurred: {e}")
+            finally:
+                with open(os.path.join(collection_dir, COLLECTION_INFO_FILENAME), "w") as json_file:
+                    json.dump(collection_info, json_file)
 
         # Run the processing and ingestion in the current function with a spinner
         with st.spinner('Processing and ingesting PDFs...'):
