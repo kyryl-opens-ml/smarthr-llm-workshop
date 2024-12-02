@@ -4,41 +4,29 @@
 
 This is a small demo showing how to build AI search on top of visual reach data (PDFs, Images, etc)
 
+## Why 
 
-
-## Architecture 
-
-High-level diagram of the system
-
-
-```mermaid
-graph TD;
-    A[Infrastructure] --> B[Modal for LLM Inference & Training]
-    A --> C[Railway for UI & Backend & Qdrant Deployment]
-    A --> D[Main Components]
-    D --> E[UI]
-    D --> F[Qdrant]
-    D --> G[Inference]
-
-    B --> H[LLM Serving]
-    C --> I[UI Deployment]
-    C --> J[Backend Deployment]
-    C --> K[Qdrant Deployment]
-
-    E --> L[Streamlit UI]
-    F --> M[Qdrant Client]
-    G --> N[ColPaliClient]
-
-    L --> O
-    M --> P
-    N --> R
-    H --> Q
-```
+Classic way to handle visual documents (PDFs, formts, images, etc) to use OCR, Layout Detection, Table Recognition, etc. See [PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit) for exaple. But 
 
 
 ## Evaluation
 
 Before developing this we want to understand how the system performs in general, for this we are going to generate synthetic data based on SmartHR data and evaluate. This is not a real estimate, but a starting point to automate some evaluation. In real life - data from actual use should be used for this.
+
+
+### Metrics: 
+
+- NDCG@1: Measures how relevant the very top result is, adjusting for its position in the ranking.
+- NDCG@5: Evaluates the overall relevance and order of the top 5 results in a normalized way.
+- Recall@1: Indicates the percentage of all relevant items found when considering only the first result.
+- Recall@5: Shows the percentage of all relevant items retrieved within the top 5 results.
+- Precision@1: Reflects the proportion of relevant items in the very first result retrieved.
+- Precision@5: Represents the proportion of relevant items among the top 5 results returned.
+
+### Datasets:
+
+- [Smart HR Synthetic Data Single Image Single Query](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-single-query)
+- [Smart HR Synthetic Data Single Image Multiple Queries](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-multiple-queries)
 
 ### Results:
 
@@ -46,6 +34,9 @@ Before developing this we want to understand how the system performs in general,
 |---------|----------|--------|--------|----------|----------|-------------|-------------|
 | [synthetic-data-single-image-single-query](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-single-query) | English  | 0.5190 | 0.7021 | 0.5190   | 0.8354   | 0.5190      | 0.1671      |
 | [synthetic-data-single-image-single-query](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-single-query) | Japanese | 0.7215 | 0.8342 | 0.7215   | 0.9241   | 0.7215      | 0.1848      |
+
+| [smart-hr-synthetic-data-single-image-multiple-queries](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-multiple-queries) | English  | 0.5190 | 0.7021 | 0.5190   | 0.8354   | 0.5190      | 0.1671      |
+| [smart-hr-synthetic-data-single-image-multiple-queries](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-multiple-queries) | Japanese | 0.7215 | 0.8342 | 0.7215   | 0.9241   | 0.7215      | 0.1848      |
 
 
 ### Process:
@@ -65,6 +56,25 @@ python ai_search_demo/evaluate_synthetic_data.py evaluate-on-synthetic-dataset k
 
 
 python ai_search_demo/evaluate_synthetic_data.py create-synthetic-dataset ./example_data/smart-hr ./example_data/smart-hr-synthetic-data-single-image-multiple-queries koml/smart-hr-synthetic-data-single-image-multiple-queries --num-samples 1000
+python ai_search_demo/evaluate_synthetic_data.py evaluate-on-synthetic-dataset koml/smart-hr-synthetic-data-single-image-multiple-queries --collection-name smart-hr-synthetic-data-single-image-multiple-queries
+```
+
+## Architecture 
+
+High-level diagram of the system
+
+
+```mermaid
+graph TD;
+    D[Main Components] --> E[App]
+    D --> F[Qdrant Vector Store]
+    D --> G[Inference]
+
+    E --> L[Streamlit UI]
+    F --> M[Qdrant Client]
+    G --> N[ColPaliClient]
+    G --> Z[Qwen2-VLClient]
+
 ```
 
 
