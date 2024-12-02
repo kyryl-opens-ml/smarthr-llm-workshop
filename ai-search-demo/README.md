@@ -8,7 +8,7 @@ This is a small demo showing how to build AI search on top of visual reach data 
 
 ## Architecture 
 
-Hitht leve diagram of the systen 
+High-level diagram of the system
 
 
 ```mermaid
@@ -42,17 +42,15 @@ Before developing this we want to understand how the system performs in general,
 
 ### Results:
 
-| Dataset | Language | NDCG@1 | NDCG@3 | Recall@1 | Recall@3 | Precision@1 | Precision@4 |
+| Dataset | Language | NDCG@1 | NDCG@5 | Recall@1 | Recall@5 | Precision@1 | Precision@5 |
 |---------|----------|--------|--------|----------|----------|-------------|-------------|
-| [synthetic-data-single-image-single-query](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-single-query) | English  | 0.85   | 0.78   | 0.90     | 0.82     | 0.88        | 0.75        |
-| [synthetic-data-single-image-single-query](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-single-query) | Japanese | 0.80   | 0.76   | 0.85     | 0.80     | 0.83        | 0.70        |
-| [Dataset 3](#) | English  | 0.82   | 0.79   | 0.87     | 0.81     | 0.85        | 0.72        |
-| [Dataset 4](#) | Japanese | 0.78   | 0.74   | 0.82     | 0.78     | 0.80        | 0.68        |
+| [synthetic-data-single-image-single-query](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-single-query) | English  | 0.5190 | 0.7021 | 0.5190   | 0.8354   | 0.5190      | 0.1671      |
+| [synthetic-data-single-image-single-query](https://huggingface.co/datasets/koml/smart-hr-synthetic-data-single-image-single-query) | Japanese | 0.7215 | 0.8342 | 0.7215   | 0.9241   | 0.7215      | 0.1848      |
 
 
 ### Process:
 
-Evaluation process had 2 stage: we generate sytbeht data based on existng SmartHR PDFs and evaluate our visual retravala. To run small test:
+The evaluation process had two stages: we generated synthetic data based on existing SmartHR PDFs and evaluated our visual retrieval. To run a small test:
 
 ```
 python ai_search_demo/evaluate_synthetic_data.py create-synthetic-dataset ./example_data/smart-hr ./example_data/smart-hr-dataset-test koml/smart-hr-synthetic-data-test

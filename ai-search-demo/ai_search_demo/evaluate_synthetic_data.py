@@ -1,19 +1,20 @@
 import base64
 import os
+import random
 from io import BytesIO
 from typing import Dict, List
-import random
+
 import PIL
 import typer
 from colpali_engine.trainer.eval_utils import CustomRetrievalEvaluator
-from datasets import Dataset, load_from_disk, load_dataset
+from datasets import Dataset, load_dataset
 from openai import OpenAI
 from pydantic import BaseModel
-from tqdm import tqdm
 from rich import print
 from rich.table import Table
+from tqdm import tqdm
 
-from ai_search_demo.qdrant_inexing import IngestClient, SearchClient, pdfs_to_hf_dataset
+from ai_search_demo.qdrant_inexing import SearchClient, pdfs_to_hf_dataset
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -100,8 +101,8 @@ def evaluate_on_synthetic_dataset(hub_repo: str, collection_name: str = "synthet
     synthetic_dataset = load_dataset(hub_repo)['train']
 
     print("Ingest data to qdrant")
-    ingest_client = IngestClient()
-    ingest_client.ingest(collection_name, synthetic_dataset)
+    # ingest_client = IngestClient()
+    # ingest_client.ingest(collection_name, synthetic_dataset)
 
     run_evaluation(synthetic_dataset=synthetic_dataset, collection_name=collection_name, query_text_key='question_en')
     run_evaluation(synthetic_dataset=synthetic_dataset, collection_name=collection_name, query_text_key='question_jp')
@@ -115,7 +116,7 @@ def run_evaluation(synthetic_dataset: Dataset, collection_name: str, query_text_
         query_id = f"{x['pdf_name']}_{x['pdf_page']}"
         relevant_docs[query_id] = {query_id: 1}  # The most relevant document is itself
 
-        response = search_client.search_images_by_text(query_text=x['question_en'], collection_name=collection_name, top_k=10)
+        response = search_client.search_images_by_text(query_text=x[query_text_key], collection_name=collection_name, top_k=10)
         
         results[query_id] = {}
         for point in response.points:
