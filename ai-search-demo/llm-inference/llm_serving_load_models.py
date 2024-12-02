@@ -5,8 +5,6 @@ MODELS_DIR = "/models"
 DEFAULT_NAME = "Qwen/Qwen2.5-7B-Instruct"
 DEFAULT_REVISION = "bb46c15ee4bb56c5b63245ef50fd7637234d6f75"
 
-# Qwen/Qwen2-VL-7B-Instruct
-
 
 volume = modal.Volume.from_name("models", create_if_missing=True)
 

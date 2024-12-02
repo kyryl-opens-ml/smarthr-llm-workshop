@@ -134,6 +134,14 @@ sequenceDiagram
 
 ## LLM推論
 
+セットアップ
+
+```
+pip install modal
+modal setup
+```
+
+
 モデルのダウンロード
 
 ```
@@ -146,6 +154,6 @@ modal run llm-inference/llm_serving_load_models.py --model-name vidore/colqwen2-
 モデルをデプロイする
 
 ```
-modal deploy llm-inference/llm_serving.py 
+modal deploy llm-inference/llm_serving.py
 modal deploy llm-inference/llm_serving_colpali.py
 ```

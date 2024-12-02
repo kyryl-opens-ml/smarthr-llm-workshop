@@ -63,6 +63,11 @@ python ai_search_demo/evaluate_synthetic_data.py create-synthetic-dataset ./exam
 python ai_search_demo/evaluate_synthetic_data.py evaluate-on-synthetic-dataset koml/smart-hr-synthetic-data-single-image-multiple-queries --collection-name smart-hr-synthetic-data-single-image-multiple-queries
 ```
 
+## Demo data
+
+- [SmartHR](https://smarthr.jp/know-how/ebook/tv-campaign/)
+- VC Reports: [InfraRed](https://www.redpoint.com/infrared/report/) & [024: The State of Generative AI in the Enterprise](https://menlovc.com/2024-the-state-of-generative-ai-in-the-enterprise/)
+
 ## Architecture 
 
 High-level diagram of the system.
@@ -135,6 +140,14 @@ sequenceDiagram
 
 ## LLM inference 
 
+
+Setup
+
+```
+pip install modal
+modal setup
+```
+
 Download models
 
 ```
@@ -147,6 +160,6 @@ modal run llm-inference/llm_serving_load_models.py --model-name vidore/colqwen2-
 Deploy models
 
 ```
-modal deploy llm-inference/llm_serving.py 
+modal deploy llm-inference/llm_serving.py
 modal deploy llm-inference/llm_serving_colpali.py
 ```
