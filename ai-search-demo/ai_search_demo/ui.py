@@ -1,11 +1,11 @@
-import streamlit as st
-import os
 import json
+import os
+
 import pandas as pd
-import threading
-from ai_search_demo.qdrant_inexing import IngestClient, pdfs_to_hf_dataset
-from ai_search_demo.qdrant_inexing import SearchClient
+import streamlit as st
 from datasets import load_from_disk
+
+from ai_search_demo.qdrant_inexing import IngestClient, SearchClient, pdfs_to_hf_dataset
 
 STORAGE_DIR = "storage"
 COLLECTION_INFO_FILENAME = "collection_info.json"

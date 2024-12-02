@@ -1,12 +1,13 @@
-from qdrant_client import QdrantClient
-from qdrant_client.http import models
-from tqdm import tqdm
+import io
+import tracemalloc
+from pathlib import Path
+
+import requests
+from datasets import Dataset
 from pdf2image import convert_from_path
 from pypdf import PdfReader
-import io
-import requests
-from pathlib import Path
-from datasets import Dataset
+from qdrant_client import QdrantClient
+from qdrant_client.http import models
 from tqdm import tqdm
 
 # Constants
@@ -142,7 +143,7 @@ class SearchClient:
 
         return search_result
 
-import tracemalloc
+
 
 def get_pdf_images(pdf_path):
     reader = PdfReader(pdf_path)
@@ -152,7 +153,7 @@ def get_pdf_images(pdf_path):
         text = page.extract_text()
         page_texts.append(text)
     # Convert to PIL images
-    images = convert_from_path(pdf_path, dpi=150, fmt="jpeg", jpegopt={"quality": 75, "progressive": True, "optimize": True})
+    images = convert_from_path(pdf_path, dpi=150, fmt="jpeg", jpegopt={"quality": 100, "progressive": True, "optimize": True})
     assert len(images) == len(page_texts)
     return images, page_texts
 
@@ -168,8 +169,6 @@ def pdfs_to_hf_dataset(path_to_folder):
         images, page_texts = get_pdf_images(str(pdf_file))
 
         for page_number, (image, text) in enumerate(zip(images, page_texts)):
-            print(f"page_number = {page_number}")
-            print(f"image = {image}")
             data.append({
                 "image": image,
                 "index": global_index,
