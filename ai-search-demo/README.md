@@ -6,7 +6,7 @@
 
 ## なぜ
 
-視覚的な文書（PDF、フォーム、画像など）を扱う従来の方法は、OCR、レイアウト検出、テーブル認識などを使用することです。例えば、[PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit)、[Tesseract](https://github.com/tesseract-ocr/tesseract)、または[PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)を参照してください。しかし、私たちはPDFをページごとに分割し、各ページを画像として埋め込むことで複雑さを回避します。視覚的理解のために使用する主なモデルは[Qwen2-VL](https://arxiv.org/abs/2409.12191)とColPaliです。
+視覚的な文書（PDF、フォーム、画像など）を扱う従来の方法は、OCR、レイアウト検出、テーブル認識などを使用することです。例えば、[PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit)、[Tesseract](https://github.com/tesseract-ocr/tesseract)、または[PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)を参照してください。しかし、私たちはPDFをページごとに分割し、各ページを画像として埋め込むことで複雑さを回避します。視覚的理解のために使用する主なモデルは[Qwen2-VL](https://arxiv.org/abs/2409.12191)と[ColPali](https://github.com/illuin-tech/colpali)です。
 
 ## 評価
 
