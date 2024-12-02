@@ -145,28 +145,3 @@ def get_model_config(engine):
         model_config = asyncio.run(engine.get_model_config())
 
     return model_config
-
-
-def client():
-
-    model = "Qwen2-VL-7B-Instruct"
-    img_url = "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
-    prompt = "Translate text on image to Japanese"
-
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": f"{img_url}"},
-                    },
-                ],
-            }
-        ],
-    )
-
-    print(response.choices[0].message)

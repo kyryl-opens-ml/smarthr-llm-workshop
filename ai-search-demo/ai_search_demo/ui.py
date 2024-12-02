@@ -1,10 +1,15 @@
 import json
 import os
-
+from pathlib import Path
+import PIL.Image
 import pandas as pd
 import streamlit as st
 from datasets import load_from_disk
-
+from openai import OpenAI
+import PIL
+import base64
+from io import BytesIO
+from pydantic import BaseModel
 from ai_search_demo.qdrant_inexing import IngestClient, SearchClient, pdfs_to_hf_dataset
 
 STORAGE_DIR = "storage"
@@ -12,12 +17,49 @@ COLLECTION_INFO_FILENAME = "collection_info.json"
 HF_DATASET_DIRNAME = "hf_dataset"
 README_FILENAME = "README.md"
 SEARCH_TOP_K = 5
-
+COLPALI_TOKEN = "super-secret-token"
+VLLM_URL = "https://truskovskiyk--qwen2-vllm-serve.modal.run/v1/"
 search_client = SearchClient()
 ingest_client = IngestClient()
 
 # Set Streamlit to use wide mode by default
 st.set_page_config(layout="wide")
+
+
+
+def call_vllm(image_data: PIL.Image.Image):
+    model = "Qwen2-VL-7B-Instruct"
+    prompt = """
+    If the user query is a question, try your best to answer it based on the provided images. 
+    If the user query can not be interpreted as a question, or if the answer to the query can not be inferred from the images,
+    answer with the exact phrase "I am sorry, I can't find enough relevant information on these pages to answer your question.".
+    """
+
+    # Convert PIL image to base64 string after resizing
+    buffered = BytesIO()
+    # Resize the image to reduce its size
+    max_size = (512, 512)
+    image_data.thumbnail(max_size)
+    image_data.save(buffered, format="JPEG")
+    img_b64_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+    client = OpenAI(base_url=VLLM_URL, api_key=COLPALI_TOKEN)
+    chat_completion = client.chat.completions.create(
+        model=model,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/jpeg;base64,{img_b64_str}"},
+                    },
+                ],
+            }
+        ],
+    )
+    return chat_completion.choices[0].message.content
 
 def ai_search():
     st.header("AI Search")
@@ -39,22 +81,39 @@ def ai_search():
         if os.path.exists(collection_info_path):
             with open(collection_info_path, "r") as json_file:
                 collection_info = json.load(json_file)
-                st.write(f"Searching in collection: {collection_info['name']}")
-                # Here you would implement the actual search logic
-                # For now, we just display a placeholder message
-                st.write(f"Results for query '{user_query}' in collection '{collection_name}':")
                 search_results = search_client.search_images_by_text(user_query, collection_name=collection_name, top_k=SEARCH_TOP_K)
                 if search_results:
                     dataset_path = os.path.join(STORAGE_DIR, collection_name, HF_DATASET_DIRNAME)
                     dataset = load_from_disk(dataset_path)
+                    
+                    # Collect all search results
+                    search_results_data = []
                     for result in search_results.points:
                         payload = result.payload
                         score = result.score
                         image_data = dataset[payload['index']]['image']
                         pdf_name = dataset[payload['index']]['pdf_name']
                         pdf_page = dataset[payload['index']]['pdf_page']
-                        # Display the extracted information in the UI
-                        st.image(image_data, caption=f"Score: {score}, PDF Name: {pdf_name}, Page: {pdf_page}")
+                        search_results_data.append((image_data, score, pdf_name, pdf_page))
+                    
+                    # Create columns for displaying results
+                    col1, col2 = st.columns(2)
+                    
+                    # Display images in the first column
+                    with col1:
+                        st.markdown("<h3 style='color:green;'>Relevant Images</h3>", unsafe_allow_html=True)
+                        for image_data, score, pdf_name, pdf_page in search_results_data:
+                            st.image(image_data, caption=f"Score: {score}, PDF Name: {pdf_name}, Page: {pdf_page}")
+                    
+                    # Display VLLM output in the second column
+                    with col2:
+                        st.markdown("<h3 style='color:green;'>Relevant Images</h3>", unsafe_allow_html=True)
+                        for image_data, _, _, _ in search_results_data:
+                            with st.spinner("Processing with VLLM..."):
+                                vllm_output = call_vllm(image_data)
+                                
+                                st.write(vllm_output)
+                                st.write(f"Score: {score}, PDF Name: {pdf_name}, Page: {pdf_page}")
                 else:
                     st.write("No results found.")
 
