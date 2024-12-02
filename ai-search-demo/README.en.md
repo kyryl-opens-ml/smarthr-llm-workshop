@@ -66,7 +66,7 @@ python ai_search_demo/evaluate_synthetic_data.py evaluate-on-synthetic-dataset k
 ## Demo data
 
 - [SmartHR](https://smarthr.jp/know-how/ebook/tv-campaign/)
-- VC Reports: [InfraRed](https://www.redpoint.com/infrared/report/) & [024: The State of Generative AI in the Enterprise](https://menlovc.com/2024-the-state-of-generative-ai-in-the-enterprise/)
+- VC Reports: [InfraRed](https://www.redpoint.com/infrared/report/) & [The State of Generative AI in the Enterprise](https://menlovc.com/2024-the-state-of-generative-ai-in-the-enterprise/)
 
 ## Architecture 
 

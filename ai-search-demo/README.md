@@ -62,6 +62,12 @@ python ai_search_demo/evaluate_synthetic_data.py create-synthetic-dataset ./exam
 python ai_search_demo/evaluate_synthetic_data.py evaluate-on-synthetic-dataset koml/smart-hr-synthetic-data-single-image-multiple-queries --collection-name smart-hr-synthetic-data-single-image-multiple-queries
 ```
 
+## Demo data
+
+- [SmartHR](https://smarthr.jp/know-how/ebook/tv-campaign/)
+- VC Reports: [InfraRed](https://www.redpoint.com/infrared/report/) & [The State of Generative AI in the Enterprise](https://menlovc.com/2024-the-state-of-generative-ai-in-the-enterprise/)
+
+
 ## Architecture 
 
 システムの高レベル図。
