@@ -6,7 +6,7 @@ This is a small demo showing how to build AI search on top of visual data (PDFs,
 
 ## Why 
 
-The classic way to handle visual documents (PDFs, forms, images, etc.) is to use OCR, Layout Detection, Table Recognition, etc. See [PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit) [Tesseract](https://github.com/tesseract-ocr/tesseract) or [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) for example. However, we are going to split PDFs by page and embed each as an image to avoid complexity. The main models we are going to use are [Qwen2-VL](https://arxiv.org/abs/2409.12191) for visual understanding and ColPali.
+The classic way to handle visual documents (PDFs, forms, images, etc.) is to use OCR, Layout Detection, Table Recognition, etc. See [PDF-Extract-Kit](https://github.com/opendatalab/PDF-Extract-Kit) [Tesseract](https://github.com/tesseract-ocr/tesseract) or [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) for example. However, we are going to split PDFs by page and embed each as an image to avoid complexity. The main models we are going to use are [Qwen2-VL](https://arxiv.org/abs/2409.12191) for visual understanding and [ColPali](https://github.com/illuin-tech/colpali).
 
 
 ## Evaluation
