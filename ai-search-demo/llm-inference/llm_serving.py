@@ -27,9 +27,9 @@ HOURS = 60 * MINUTES
 
 @app.function(
     image=vllm_image,
-    gpu=modal.gpu.H100(count=N_GPU),
-    keep_warm=1,
-    container_idle_timeout=5 * MINUTES,
+    gpu=modal.gpu.A100(count=N_GPU),
+    keep_warm=0,
+    container_idle_timeout=1 * MINUTES,
     timeout=24 * HOURS,
     allow_concurrent_inputs=1000,
     volumes={MODELS_DIR: volume},
